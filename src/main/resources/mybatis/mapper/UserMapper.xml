@@ -1,0 +1,143 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ale.dao.UserDAO">
+
+    <!-- 通用查询结果列：数据库表字段 -->
+    <sql id="Base_Column_List">
+        user_id,
+        user_name,
+        password,
+        phone_num,
+        authorities,
+        email,
+        gmt_create,
+        gmt_modified
+    </sql>
+    <!-- 通用resultMap：实体类成员变量一一对应数据库表字段 -->
+    <resultMap type="com.ale.entity.User" id="BaseResultMap">
+        <id property="userId" column="user_id" />
+        <result property="userName" column="user_name" />
+        <result property="password" column="password" />
+        <result property="phoneNum" column="phone_num" />
+        <result property="authorities" column="authorities" />
+        <result property="email" column="email" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+    </resultMap>
+
+    <insert id="saveOne" useGeneratedKeys="true" keyProperty="userId" parameterType="com.ale.entity.User">
+        INSERT INTO tb_user
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                user_id,
+            </if>
+            <if test="userName != null and userName !=''">
+                user_name,
+            </if>
+            <if test="password != null">
+                password,
+            </if>
+            <if test="authorities != null">
+                authorities,
+            </if>
+            <if test="phoneNum != null and phoneNum !=''">
+                phone_num,
+            </if>
+            <if test="email != null and email !=''">
+                email,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="userId != null">
+                #{userId},
+            </if>
+            <if test="password != null">
+                #{password},
+            </if>
+            <if test="userName != null and userName !=''">
+                #{userName},
+            </if>
+            <if test="phoneNum != null and phoneNum !=''">
+                #{phoneNum},
+            </if>
+            <if test="authorities != null">
+                #{authorities},
+            </if>
+            <if test="email != null and email !=''">
+                #{email},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified},
+            </if>
+        </trim>
+    </insert>
+
+    <delete id="removeOne" parameterType="java.lang.Integer">
+        DELETE FROM tb_user
+        WHERE user_id = #{userId}
+    </delete>
+
+    <update id="updateOne" parameterType="com.ale.entity.User">
+        UPDATE tb_user
+        <set>
+            <if test="userName != null and userName !=''">
+                user_name = #{userName},
+            </if>
+            <if test="userName != null and userName !=''">
+                authorities = #{authorities},
+            </if>
+            <if test="phoneNum != null and phoneNum !=''">
+                phone_num = #{phoneNum},
+            </if>
+            <if test="password != null and userName !=''">
+                password = #{password},
+            </if>
+            <if test="email != null and email !=''">
+                email = #{email},
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create = #{gmtCreate},
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified = #{gmtModified},
+            </if>
+        </set>
+        WHERE user_id = #{userId}
+    </update>
+    <select id="getOne" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_user
+        WHERE user_id = #{userId}
+    </select>
+
+    <select id="loadUserByUsername" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_user
+        WHERE user_name = #{userName}
+    </select>
+
+    <select id="listUser" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_user
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <bind name="pattern_keyword" value="'%' + keyword + '%'"/>
+                columnName LIKE  #{pattern_keyword}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+
+
