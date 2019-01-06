@@ -1,0 +1,19 @@
+@startuml
+
+FilterSecurityInterceptor -> SecurityMetadataSource: getAttributes(Object): Collection<ConfigAttribute>
+activate SecurityMetadataSource
+
+FilterSecurityInterceptor <-- SecurityMetadataSource
+deactivate SecurityMetadataSource
+
+
+FilterSecurityInterceptor -> AuthenticationManager: authenticate(Authentication): Authentication
+activate AuthenticationManager
+FilterSecurityInterceptor <-- AuthenticationManager
+deactivate AuthenticationManager
+
+FilterSecurityInterceptor -> AccessDecisionManger: decide(Authentication object, Collection<ConfigAttribute>)
+activate AccessDecisionManger
+FilterSecurityInterceptor <-- AccessDecisionManger
+deactivate AccessDecisionManger
+@enduml

@@ -1,6 +1,7 @@
 package ${packageName}.service.impl;
 
-import ${packageName}.common.page.PageHelper;
+import ${packageName}.common.mvc.BaseServiceImpl;
+import ${packageName}.common.page.PageUtil;
 import ${packageName}.common.page.PageBean;
 import ${packageName}.common.page.PageParam;
 import ${packageName}.entity.${entityName};
@@ -28,9 +29,9 @@ public class ${entityName}ServiceImpl extends BaseServiceImpl<${entityName}> imp
 
     @Override
     public PageBean<${entityName}> list${entityName}(PageParam pageParam) {
-        PageHelper.startPage(pageParam);
+        PageUtil.startPage(pageParam);
         List<${entityName}> list = ${entityName ? uncap_first}DAO.list${entityName}();
-        return PageHelper.getPageBean(list);
+        return PageUtil.getPageBean(list);
     }
 
 }

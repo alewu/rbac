@@ -1,5 +1,6 @@
 package ${packageName}.service;
 
+import ${packageName}.common.mvc.BaseService;
 import ${packageName}.entity.${entityName};
 import ${packageName}.common.page.PageBean;
 import ${packageName}.common.page.PageParam;

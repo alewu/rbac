@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ale.dao.PermissionDAO">
+
+    <!-- 通用查询结果列：数据库表字段 -->
+    <sql id="Base_Column_List">
+        permission_id,
+        name,
+        type,
+        url,
+        gmt_create,
+        gmt_modified
+    </sql>
+    <!-- 通用resultMap：实体类成员变量一一对应数据库表字段 -->
+    <resultMap type="com.ale.entity.Permission" id="BaseResultMap">
+        <id property="permissionId" column="permission_id" />
+        <result property="name" column="name" />
+        <result property="type" column="type" />
+        <result property="url" column="url" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="permissionId" parameterType="com.ale.entity.Permission">
+        INSERT INTO tb_permission
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="permissionId != null">
+                permission_id,
+            </if>
+            <if test="name != null and name !=''">
+                name,
+            </if>
+            <if test="type != null and type !=''">
+                type,
+            </if>
+            <if test="url != null and url !=''">
+                url,
+            </if>
+           gmt_create, gmt_modified
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="permissionId != null">
+                #{permissionId},
+            </if>
+            <if test="name != null and name !=''">
+                #{name},
+            </if>
+            <if test="type != null and type !=''">
+                #{type},
+            </if>
+            <if test="url != null and url !=''">
+                #{url},
+            </if>
+            NOW(), NOW()
+        </trim>
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM tb_permission
+        WHERE permission_id = #{permissionId}
+    </delete>
+    <update id="update" parameterType="com.ale.entity.Permission">
+        UPDATE tb_permission
+        <set>
+            <if test="name != null and name !=''">
+                name = #{name},
+            </if>
+            <if test="type != null and type !=''">
+                type = #{type},
+            </if>
+            <if test="url != null and url !=''">
+                url = #{url},
+            </if>
+            gmt_modified = NOW()
+        </set>
+        WHERE permission_id = #{permissionId}
+    </update>
+    <select id="get" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_permission
+        WHERE permission_id = #{permissionId}
+    </select>
+
+    <select id="listPermission" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_permission
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <bind name="pattern_keyword" value="'%' + keyword + '%'"/>
+                columnName LIKE  #{pattern_keyword}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+
+

@@ -1,5 +1,6 @@
 package ${packageName}.dao;
 
+import ${packageName}.common.mvc.BaseDAO;
 import ${packageName}.entity.${entityName};
 import java.util.List;
 import org.springframework.stereotype.Repository;

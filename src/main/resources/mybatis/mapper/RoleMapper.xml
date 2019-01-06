@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ale.dao.RoleDAO">
+
+    <!-- 通用查询结果列：数据库表字段 -->
+    <sql id="Base_Column_List">
+        role_id,
+        name,
+        description,
+        gmt_create,
+        gmt_modified
+    </sql>
+    <!-- 通用resultMap：实体类成员变量一一对应数据库表字段 -->
+    <resultMap type="com.ale.entity.Role" id="BaseResultMap">
+        <id property="roleId" column="role_id" />
+        <result property="name" column="name" />
+        <result property="description" column="description" />
+        <result property="gmtCreate" column="gmt_create" />
+        <result property="gmtModified" column="gmt_modified" />
+    </resultMap>
+
+    <insert id="insert" useGeneratedKeys="true" keyProperty="roleId" parameterType="com.ale.entity.Role">
+        INSERT INTO tb_role
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                role_id,
+            </if>
+            <if test="name != null and name !=''">
+                name,
+            </if>
+            <if test="description != null and description !=''">
+                description,
+            </if>
+           gmt_create, gmt_modified
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="roleId != null">
+                #{roleId},
+            </if>
+            <if test="name != null and name !=''">
+                #{name},
+            </if>
+            <if test="description != null and description !=''">
+                #{description},
+            </if>
+            NOW(), NOW()
+        </trim>
+    </insert>
+    <delete id="delete" parameterType="java.lang.Integer">
+        DELETE FROM tb_role
+        WHERE role_id = #{roleId}
+    </delete>
+    <update id="update" parameterType="com.ale.entity.Role">
+        UPDATE tb_role
+        <set>
+            <if test="name != null and name !=''">
+                name = #{name},
+            </if>
+            <if test="description != null and description !=''">
+                description = #{description},
+            </if>
+            gmt_modified = NOW()
+        </set>
+        WHERE role_id = #{roleId}
+    </update>
+    <select id="get" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_role
+        WHERE role_id = #{roleId}
+    </select>
+
+    <select id="listRole" resultMap="BaseResultMap">
+        SELECT <include refid="Base_Column_List"/>
+        FROM tb_role
+        <where>
+            <if test="keyword != null and keyword != ''">
+                <bind name="pattern_keyword" value="'%' + keyword + '%'"/>
+                columnName LIKE  #{pattern_keyword}
+            </if>
+        </where>
+    </select>
+
+
+</mapper>
+
+
